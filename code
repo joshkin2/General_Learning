@@ -1,0 +1,75 @@
+--display full table of shows
+SELECT * FROM shows;
+
+--grab specific columns from table
+SELECT id, name, genre
+FROM shows;
+-- or like this
+SELECT id, name, genre FROM shows;
+
+--view unique values in a table
+SELECT DISTINCT genre
+FROM shows;
+
+--filter for information based on a condition:
+SELECT *
+FROM shows
+WHERE tomatometer <60;
+--Here’s another example:
+SELECT *
+FROM shows
+WHERE year > 2020;
+
+--search for a pattern in a column
+SELECT *
+FROM shows
+WHERE genre LIKE '%com%'
+--A% matches values that begin with letter 'A'.
+--%z matches values that end with 'z'.
+--%the% matches values that contains the word "the" in its name.
+
+-- filter the result set within a certain range
+SELECT *
+FROM shows
+WHERE year
+BETWEEN 2020 AND 2025;
+
+SELECT *
+FROM shows
+WHERE name
+BETWEEN 'A' AND 'D';
+
+-- sorts rows of data in ascending or descending order
+SELECT name, genre, stream, year
+FROM shows
+ORDER BY year;
+--DESCENDING ORDER
+SELECT name, genre, stream, year
+FROM shows
+ORDER BY year DESC;
+
+--EXERCISE 1
+
+-- Unique restaurants
+SELECT DISTINCT cuisine
+FROM restaurants;
+-- Chinese spots
+SELECT *
+FROM restaurants
+WHERE cuisine = 'Chinese';
+-- Italian spots
+SELECT *
+FROM restaurants
+WHERE cuisine = 'Italian';
+-- Restaurants in Greenpoint
+SELECT *
+FROM restaurants
+WHERE neighborhood = 'Greenpoint';
+-- Cheap eats
+SELECT *
+FROM restaurants
+WHERE price = '$';
+-- Bougie spots
+SELECT *
+FROM restaurants
+WHERE price = '$$$';
