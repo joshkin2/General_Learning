@@ -1,0 +1,119 @@
+# Before you can enter SQL commands, you need to open the psql shell so you can directly interact with the PostgreSQL database. In the command prompt or terminal, enter:Replace username with your username and database_name with the database you want to connect to.
+psql -U <username> -d <database_name>
+# If you have not created your own database yet, PostgreSQL automatically includes a default database called postgres when installed.  use this postgres database to follow along. Once connected, you will see the prompt change to:
+postgres=#
+# create a database named my_database:
+CREATE DATABASE my_database;
+# In the interactive psql shell, switch databases with the \c shortcut command followed by the database name. \c command and other shortcut commands (ones with a backslash in front of them) are part of the psql shell and not part of the SQL language itself, so they don't require a semi-colon to complete the command.
+\c my_database
+# create a table with the CREATE TABLE keywords. standard naming convention for table and column names is snake case, writing words in lowercase and separating them with an underscore (_). example: delivery_orders
+CREATE TABLE products (
+  id SERIAL,
+  name VARCHAR(255)
+);
+# To define a table in SQL, you need to specify the data type of each column.
+CREATE TABLE table_name(
+  column1 data_type column_constraint,
+  column2 data_type column_constraint,
+  column3 data_type column_constraint,
+  ... etc
+);
+# There are six popular categories of data types in SQL: 1.Numeric, such as INTEGER, FLOAT, SERIAL, and DECIMAL. 2.Date and time, such as TIMESTAMP, DATE, and TIME. 3.Character and string. These include CHAR, VARCHAR, and TEXT. 4.Unicode, including NTEXT, and NVARCHAR. These are used to make sure that text will be stored and retrieved correctly, regardless of the characters' origin. 5.Binary, used to store non-textual data, like images, audio, and video files. 6.And other miscellaneous data types, such as XML and TABLE.
+
+# assign this data type to a units_sold column.
+units_sold INTEGER
+# A useful feature available in PostgreSQL is to create a column using the SERIAL keyword. While it's not a true data type, it's very helpful for creating unique identifier columns because the column will have an INTEGER type, will not allow NULL values, and automatically increment when rows are added.
+id SERIAL
+# In MySQL, the equivalent of SERIAL would be the <AUTO_INCREMENT> attribute, used to generate sequential integers automatically:
+id INT AUTO_INCREMENT
+# VARCHAR data type. This data type is used for a variable string length. You can set the maximum character length within parentheses:
+name VARCHAR(50)
+# if you need to store strings of any length, you can use TEXT instead:
+name TEXT
+# if you create a table to store events, you may need to store the date of each event in a specific format:
+event_date DATE
+# you may store the time when an event starts:
+start_time TIME
+# The TIMESTAMP data type combines both of them. It may also include the time zone if you write TIMESTAMP WITH TIME ZONE:
+event_timestamp TIMESTAMP
+event_timestamp TIMESTAMP WITH TIME ZONE
+# if you need to store a boolean value, TRUE or FALSE:
+is_active BOOLEAN
+
+# to view data, you need to insert it. The examples below will be based on this table of dog records:
+CREATE TABLE dogs(
+  id SERIAL,
+  name VARCHAR(100),
+  age INTEGER
+);
+# inserting a dog record with the name of 'Gino', whose age is 3, id will be assigned automatically. 'Gino' needs to be in single quotes because it is a VARCHAR type.
+INSERT INTO dogs (name, age)
+VALUES ('Gino', 3);
+#  insert multiple records in the same SQL command by separating them with a comma.
+INSERT INTO dogs (name, age)
+VALUES
+  ('Gino', 3),
+  ('Nora', 2);
+# In SQL, the SELECT statement is used for querying data from one or more tables. the asterisk is a wildcard character that represents "all columns."
+SELECT *
+FROM dogs;
+# To query specific columns
+SELECT name, age
+FROM dogs;
+#  to query data based on a specific condition
+SELECT *
+FROM dogs
+WHERE age < 3;
+# another conditional example
+SELECT age
+FROM dogs
+WHERE name = 'Gino';
+# In PostgreSQL, to make a column the primary key of a table, add PRIMARY KEY after the data type:
+column_name data_type PRIMARY KEY
+# more example on the above
+CREATE TABLE students (
+  student_id SERIAL PRIMARY KEY,
+  name VARCHAR(100)
+);
+
+# Imagine you have a table with student_id and course_id columns that tells you what students are enrolled in various classes. Each student will be enrolled in several classes, and each class will have several students enrolled in it. So neither column is unique - but you will never have the same student enrolled in the same class more than once. So you can use the combination of the two columns as the primary key. Primary keys are essential for ensuring data uniqueness and integrity, for optimizing data retrieval, and for establishing relationships with other tables in a relational database.
+CREATE TABLE course_enrollments (
+  student_id INT,
+  course_id INT,
+  ...
+  PRIMARY KEY (student_id, course_id),
+);
+
+# A foreign key is a column (or set of columns) in a table that references the primary key of another table. A table can have multiple foreign keys.
+CREATE TABLE customers (
+  customer_id SERIAL PRIMARY KEY,
+  first_name VARCHAR(100) NOT NULL,
+  ...
+);
+CREATE TABLE orders (
+  order_id SERIAL PRIMARY KEY,
+  customer_id INTEGER,
+  ...
+  FOREIGN KEY (customer_id) REFERENCES customers(customer_id)
+);
+
+# We can perform an INNER JOIN like this:  it gives you the intersection of the data
+SELECT *
+FROM products
+INNER JOIN sales
+  ON products.product_id = sales.product_id;
+# A FULL OUTER JOIN returns all rows from both tables
+SELECT *
+FROM products
+FULL OUTER JOIN sales
+  ON products.product_id = sales.product_id;
+# A LEFT OUTER JOIN is used to get all the records from the left table and the matching information from the right table for each row of the left table.
+SELECT *
+FROM products
+LEFT JOIN sales
+  ON products.product_id = sales.product_id;
+# A RIGHT OUTER JOIN is very similar
+SELECT *
+FROM products
+RIGHT JOIN sales
+  ON products.product_id = sales.product_id;
