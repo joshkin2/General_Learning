@@ -117,3 +117,66 @@ SELECT *
 FROM products
 RIGHT JOIN sales
   ON products.product_id = sales.product_id;
+
+
+# LESSON: Building a Database of Video Game Characters
+#  use the Psql terminal application to interact with it. Log in by typing the code below into the terminal
+psql --username=freecodecamp --dbname=postgres
+# First thing to do is see what databases are here
+\l
+# Create a new database
+CREATE DATABASE first_database;
+# connect to database to add information
+\c first_database
+# to display tables of database
+\d
+# create table in a database
+CREATE TABLE first_table();
+# view more details about a table
+\d first_table
+# add column to table and give it data type
+ALTER TABLE first_table ADD COLUMN first_column INT;
+ALTER TABLE second_table ADD COLUMN id INT;
+ALTER TABLE second_table ADD COLUMN age INT;
+# add column with string characters; 30 mx length
+ALTER TABLE second_table ADD COLUMN name VARCHAR(30);
+# add column with string characters; 30 mx length and not null constraint
+ALTER TABLE characters ADD COLUMN name VARCHAR(30) NOT NULL;
+# Delete database
+DROP DATABASE first_databse;
+# How to remove columns
+ALTER TABLE second_table DROP COLUMN age;
+# delete data in a row
+DELETE FROM second_table WHERE username='Luigi';
+# delete table
+DROP TABLE second_table;
+# rename a column
+ALTER TABLE second_table RENAME COLUMN name TO username;
+# rename a database
+ALTER DATABASE first_database RENAME TO mario_database;
+# add data to rows in a table
+INSERT INTO second_table(id, username) VALUES(1,'Samus');
+# add multiple entries to rows
+INSERT INTO characters(character_id, name, homeland, favorite_color) VALUES(1, 'Mario', 'Mushroom Kingdom', 'Red');
+# add three rows at once:
+INSERT INTO characters(name, homeland, favorite_color)
+VALUES('Mario', 'Mushroom Kingdom', 'Red'),
+('Luigi', 'Mushroom Kingdom', 'Green'),
+('Peach', 'Mushroom Kingdom', 'Pink');
+# view all columns in a table, Use an asterisk (*) to denote that you want to see all the columns.
+SELECT * FROM second_table;
+
+# reconnect to terminal
+psql --username=freecodecamp --dbname=second_database
+\c second_database
+\d
+
+
+
+
+
+
+
+
+
+
