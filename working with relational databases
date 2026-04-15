@@ -137,6 +137,7 @@ CREATE TABLE first_table();
 # add column to table and give it data type
 ALTER TABLE first_table ADD COLUMN first_column INT;
 ALTER TABLE second_table ADD COLUMN id INT;
+ALTER TABLE more_info ADD COLUMN weight NUMERIC(4, 1);   #has up to four digits and one of them has to be to the right of the decimal.
 ALTER TABLE second_table ADD COLUMN age INT;
 # add column with string characters; 30 mx length
 ALTER TABLE second_table ADD COLUMN name VARCHAR(30);
@@ -163,8 +164,39 @@ INSERT INTO characters(name, homeland, favorite_color)
 VALUES('Mario', 'Mushroom Kingdom', 'Red'),
 ('Luigi', 'Mushroom Kingdom', 'Green'),
 ('Peach', 'Mushroom Kingdom', 'Pink');
-# view all columns in a table, Use an asterisk (*) to denote that you want to see all the columns.
+INSERT INTO more_info(birthday,height,weight,character_id) VALUES('1981-07-09', 155, 64.5, 1);
+# view all columns/data in a table, Use an asterisk (*) to denote that you want to see all the columns.
 SELECT * FROM second_table;
+# view specific columns in a table
+SELECT character_id FROM characters;
+# view multiple columns in a table
+
+# view details of a table
+\d characters
+# view tables in a database
+\d
+# update/change table values - SET Daisy's favorite_color to Orange. You can use the condition name='Daisy' to change her row.
+UPDATE characters SET favorite_color='Orange' WHERE name='Daisy'; # change color
+UPDATE characters SET name='Toad' WHERE favorite_color='Red';     # change name
+# put order to columns
+SELECT * FROM characters ORDER BY character_id;
+# add primary key
+ALTER TABLE characters ADD PRIMARY KEY(name);
+# drop primary key on a column
+ALTER TABLE characters DROP CONSTRAINT characters_pkey;
+# create a column as a foreign key:
+ALTER TABLE more_info ADD COLUMN character_id INT REFERENCES characters(character_id);
+# enforce using  UNIQUE constraint to foreign key
+ALTER TABLE more_info ADD UNIQUE(character_id);
+# set column to NOT NULL since you don't want to have a row that is for nobody
+ALTER TABLE more_info ALTER COLUMN character_id SET NOT NULL;
+
+
+
+
+
+
+
 
 # reconnect to terminal
 psql --username=freecodecamp --dbname=second_database
